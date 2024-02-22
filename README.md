@@ -9,7 +9,7 @@ The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
 Install LibreTranslate https://github.com/LibreTranslate/LibreTranslate
-with these commands:
+with this command:
 pip install libretranslate
 
 Run LibreTranslate with:
