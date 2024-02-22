@@ -22,25 +22,23 @@ const TestPage = () => {
 
     switch (translator) {
       case 'Google Cloud Translation API':
+        // Send a POST request to Google Cloud Translation API
         if (language === 'en') {
-          // Send a POST request to Google Cloud Translation API
           translationResult = await getText(input, 'http://localhost:5001/translate-in-google', language);
           setGoogleTranslationToEnglish(translationResult.translation);
           break;
         } else {
-          // Send a POST request to Google Cloud Translation API
           translationResult = await getText(summaryFromGoogleTranslation, 'http://localhost:5001/translate-in-google', language);
           setGoogleTranslationToFinnish(translationResult.translation);
           break;
         }
       case 'LibreTranslate':
+        // Send a POST request to LibreTranslate
         if (language === 'en') {
-          // Send a POST request to LibreTranslate
           translationResult = await getTextLibre(input, language);
           setLibreTranslationToEnglish(translationResult.translatedText);
         break;
         } else {
-          // Send a POST request to LibreTranslate
           translationResult = await getTextLibre(summaryFromLibreTranslation, language);
           setLibreTranslationToFinnish(translationResult.translatedText);
           break;
@@ -108,8 +106,8 @@ const TestPage = () => {
       {summaryFromLibreTranslation ? <TextBlock label="Summary from Libre translation:" text={summaryFromLibreTranslation}/> : null}
       <button onClick={handleTranslateBackClick}>Translate back</button>
       <br/>
-      {googleTranslationToFinnish ? <TextBlock label="Google translation  translation back to finnish from summary:" text={googleTranslationToFinnish}/> : null}
-      {libreTranslationToFinnish ? <TextBlock label="Libre translation  translation back to finnish from summary:" text={libreTranslationToFinnish}/> : null}
+      {googleTranslationToFinnish ? <TextBlock label="Google translation back to finnish from summary:" text={googleTranslationToFinnish}/> : null}
+      {libreTranslationToFinnish ? <TextBlock label="Libre translation back to finnish from summary:" text={libreTranslationToFinnish}/> : null}
     </div>
   );
 }
