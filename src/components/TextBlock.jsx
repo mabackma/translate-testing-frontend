@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import './TextBlock.css';
 
 const TextBlock = ({label, text}) => {
