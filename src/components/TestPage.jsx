@@ -7,10 +7,13 @@ const TestPage = () => {
   const [input, setInput] = useState('');
   const [summaryFromGoogleTranslation, setSummaryFromGoogleTranslation] = useState('');
   const [summaryFromLibreTranslation, setSummaryFromLibreTranslation] = useState('');
+  const [summaryFromHelsinkiTranslation, setSummaryFromHelsinkiTranslation] = useState('');
   const [googleTranslationToEnglish, setGoogleTranslationToEnglish] = useState('');
   const [googleTranslationToFinnish, setGoogleTranslationToFinnish] = useState('');
   const [libreTranslationToEnglish, setLibreTranslationToEnglish] = useState('');
   const [libreTranslationToFinnish, setLibreTranslationToFinnish] = useState('');
+  const [helsinkiTranslationToEnglish, setHelsinkiTranslationToEnglish] = useState('');
+  const [helsinkiTranslationToFinnish, setHelsinkiTranslationToFinnish] = useState('');
   const [translator, setTranslator] = useState('');
 
   const handleChange = (event) => {
@@ -43,8 +46,17 @@ const TestPage = () => {
           setLibreTranslationToFinnish(translationResult.translatedText);
           break;
         }
-      case 'translator3':
-        break;
+      case 'Helsinki-NLP/opus-mt':
+        // Send a POST request to Helsinki-NLP/opus-mt
+        if (language === 'en') {
+          translationResult = await getText(input, 'http://localhost:5001/marianmt-fi-en', language);
+          setHelsinkiTranslationToEnglish(translationResult.translation);
+          break;
+        } else {
+          translationResult = await getText(summaryFromHelsinkiTranslation, 'http://localhost:5001/marianmt-en-fi', language);
+          setHelsinkiTranslationToFinnish(translationResult.translation);
+          break;
+        }
       default:
         break;
     }
@@ -57,9 +69,12 @@ const TestPage = () => {
         if (translator === 'Google Cloud Translation API') {
         const summaryResult = await getText(googleTranslationToEnglish, 'http://localhost:5001/summary');
         setSummaryFromGoogleTranslation(summaryResult.summary);
-      } else {
+      } else if (translator === 'LibreTranslate') {
         const summaryResult = await getText(libreTranslationToEnglish, 'http://localhost:5001/summary');
         setSummaryFromLibreTranslation(summaryResult.summary);
+      } else if (translator === 'Helsinki-NLP/opus-mt') {
+        const summaryResult = await getText(helsinkiTranslationToEnglish, 'http://localhost:5001/summary');
+        setSummaryFromHelsinkiTranslation(summaryResult.summary);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -100,14 +115,17 @@ const TestPage = () => {
       <br/>
       {googleTranslationToEnglish ? <TextBlock label="Google translation from input text:" text={googleTranslationToEnglish}/> : null}
       {libreTranslationToEnglish ? <TextBlock label="Libre translation to english from input text:" text={libreTranslationToEnglish}/> : null}
+      {helsinkiTranslationToEnglish ? <TextBlock label="Helsinki-NLP translation to english from input text:" text={helsinkiTranslationToEnglish}/> : null}
       <button onClick={handleSummaryClick}>Summarize</button>
       <br/>
       {summaryFromGoogleTranslation ? <TextBlock label="Summary from Google translation:" text={summaryFromGoogleTranslation}/> : null}
       {summaryFromLibreTranslation ? <TextBlock label="Summary from Libre translation:" text={summaryFromLibreTranslation}/> : null}
+      {summaryFromHelsinkiTranslation ? <TextBlock label="Summary from Helsinki-NLP translation:" text={summaryFromHelsinkiTranslation}/> : null}
       <button onClick={handleTranslateBackClick}>Translate back</button>
       <br/>
       {googleTranslationToFinnish ? <TextBlock label="Google translation back to finnish from summary:" text={googleTranslationToFinnish}/> : null}
       {libreTranslationToFinnish ? <TextBlock label="Libre translation back to finnish from summary:" text={libreTranslationToFinnish}/> : null}
+      {helsinkiTranslationToFinnish ? <TextBlock label="Helsinki-NLP translation back to finnish from summary:" text={helsinkiTranslationToFinnish}/> : null}
     </div>
   );
 }

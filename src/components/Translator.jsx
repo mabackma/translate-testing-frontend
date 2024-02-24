@@ -8,7 +8,7 @@ const TextBlock = ({translator, setTranslator}) => {
       <div>
         <button onClick={() => handleTranslatorChange('Google Cloud Translation API')}>Google</button>
         <button onClick={() => handleTranslatorChange('LibreTranslate')}>LibreTranslate</button>
-        <button onClick={() => handleTranslatorChange('translator3')}>Translator 3</button>
+        <button onClick={() => handleTranslatorChange('Helsinki-NLP/opus-mt')}>Helsinki-NLP</button>
       </div>
       <p>{translator ? `Selected Translator: ${translator}` : 'Select Translator'}</p>
     </div>
