@@ -7,6 +7,7 @@ const TestPage = () => {
   const [input, setInput] = useState('');
   const [summaryFromGoogleTranslation, setSummaryFromGoogleTranslation] = useState('');
   const [summaryFromChatgptTranslation, setSummaryFromChatgptTranslation] = useState('');
+  const [summaryFromMicrosoftTranslation, setSummaryFromMicrosoftTranslation] = useState('');
   const [summaryFromLibreTranslation, setSummaryFromLibreTranslation] = useState('');
   const [summaryFromHelsinkiTranslation, setSummaryFromHelsinkiTranslation] = useState('');
 
@@ -15,6 +16,9 @@ const TestPage = () => {
 
   const [chatgptTranslationToEnglish, setChatgptTranslationToEnglish] = useState('');
   const [chatgptTranslationToFinnish, setChatgptTranslationToFinnish] = useState('');
+
+  const [microsoftTranslationToEnglish, setMicrosoftTranslationToEnglish] = useState('');
+  const [microsoftTranslationToFinnish, setMicrosoftTranslationToFinnish] = useState('');
 
   const [libreTranslationToEnglish, setLibreTranslationToEnglish] = useState('');
   const [libreTranslationToFinnish, setLibreTranslationToFinnish] = useState('');
@@ -44,7 +48,7 @@ const TestPage = () => {
           break;
         }
       case 'Chat-GPT':
-        // Send a POST request to Google Cloud Translation API
+        // Send a POST request to Chat-GPT API
         if (language === 'en') {
           translationResult = await getText(input, 'http://localhost:5001/chatgpt-translation', language);
           setChatgptTranslationToEnglish(translationResult.translation);
@@ -52,6 +56,17 @@ const TestPage = () => {
         } else {
           translationResult = await getText(summaryFromChatgptTranslation, 'http://localhost:5001/chatgpt-translation', language);
           setChatgptTranslationToFinnish(translationResult.translation);
+          break;
+        }
+      case 'Microsoft':
+        // Send a POST request to Microsoft API
+        if (language === 'en') {
+          translationResult = await getText(input, 'http://localhost:5001/microsoft-translation', language);
+          setMicrosoftTranslationToEnglish(translationResult.translation);
+          break;
+        } else {
+          translationResult = await getText(summaryFromMicrosoftTranslation, 'http://localhost:5001/microsoft-translation', language);
+          setMicrosoftTranslationToFinnish(translationResult.translation);
           break;
         }
       case 'LibreTranslate':
@@ -91,6 +106,9 @@ const TestPage = () => {
       } else if (translator === 'Chat-GPT') {
         const summaryResult = await getText(chatgptTranslationToEnglish, 'http://localhost:5001/summary');
         setSummaryFromChatgptTranslation(summaryResult.summary);
+      } else if (translator === 'Microsoft') {
+        const summaryResult = await getText(microsoftTranslationToEnglish, 'http://localhost:5001/summary');
+        setSummaryFromMicrosoftTranslation(summaryResult.summary);
       } else if (translator === 'LibreTranslate') {
         const summaryResult = await getText(libreTranslationToEnglish, 'http://localhost:5001/summary');
         setSummaryFromLibreTranslation(summaryResult.summary);
@@ -137,18 +155,21 @@ const TestPage = () => {
       <br/>
       {googleTranslationToEnglish ? <TextBlock label="Google translation from input text:" text={googleTranslationToEnglish}/> : null}
       {chatgptTranslationToEnglish ? <TextBlock label="Chat-GPT translation from input text:" text={chatgptTranslationToEnglish}/> : null}
+      {microsoftTranslationToEnglish ? <TextBlock label="Microsoft translation from input text:" text={microsoftTranslationToEnglish}/> : null}
       {libreTranslationToEnglish ? <TextBlock label="Libre translation to english from input text:" text={libreTranslationToEnglish}/> : null}
       {helsinkiTranslationToEnglish ? <TextBlock label="Helsinki-NLP translation to english from input text:" text={helsinkiTranslationToEnglish}/> : null}
       <button onClick={handleSummaryClick}>Summarize</button>
       <br/>
       {summaryFromGoogleTranslation ? <TextBlock label="Summary from Google translation:" text={summaryFromGoogleTranslation}/> : null}
       {summaryFromChatgptTranslation ? <TextBlock label="Summary from Chat-GPT translation:" text={summaryFromChatgptTranslation}/> : null}
+      {summaryFromMicrosoftTranslation ? <TextBlock label="Summary from Microsoft translation:" text={summaryFromMicrosoftTranslation}/> : null}
       {summaryFromLibreTranslation ? <TextBlock label="Summary from Libre translation:" text={summaryFromLibreTranslation}/> : null}
       {summaryFromHelsinkiTranslation ? <TextBlock label="Summary from Helsinki-NLP translation:" text={summaryFromHelsinkiTranslation}/> : null}
       <button onClick={handleTranslateBackClick}>Translate back</button>
       <br/>
       {googleTranslationToFinnish ? <TextBlock label="Google translation back to finnish from summary:" text={googleTranslationToFinnish}/> : null}
       {chatgptTranslationToFinnish ? <TextBlock label="Chat-GPT translation back to finnish from summary:" text={chatgptTranslationToFinnish}/> : null}
+      {microsoftTranslationToFinnish ? <TextBlock label="Microsoft translation back to finnish from summary:" text={microsoftTranslationToFinnish}/> : null}
       {libreTranslationToFinnish ? <TextBlock label="Libre translation back to finnish from summary:" text={libreTranslationToFinnish}/> : null}
       {helsinkiTranslationToFinnish ? <TextBlock label="Helsinki-NLP translation back to finnish from summary:" text={helsinkiTranslationToFinnish}/> : null}
     </div>
